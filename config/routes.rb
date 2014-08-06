@@ -1,7 +1,4 @@
 Judge::Application.routes.draw do
-
-
-
   resources :problems
 
   devise_for :users
