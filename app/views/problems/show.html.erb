@@ -1,4 +1,8 @@
-<h1>Problem</h1>
 
+<div class="page-header">
+	<h1>Problem</h1>
+</div>
+
+<h1><%= @problem.title %></h1>
 <% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true) %>
 <%= raw markdown.render(@problem.description) %>
