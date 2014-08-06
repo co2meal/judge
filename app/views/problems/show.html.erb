@@ -1,0 +1,4 @@
+<h1>Problem</h1>
+
+<% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true) %>
+<%= raw markdown.render(@problem.description) %>
