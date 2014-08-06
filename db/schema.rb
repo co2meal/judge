@@ -65,21 +65,22 @@ ActiveRecord::Schema.define(version: 20140806114824) do
     t.text     "judge_code"
   end
 
-<<<<<<< HEAD
-  create_table "submissions", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "problem_id"
-    t.text     "code"
-    t.text     "status"
-=======
   create_table "problems_tags", force: true do |t|
     t.integer "problem_id"
     t.integer "tag_id"
   end
 
+  create_table "submissions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "problem_id"
+    t.text     "code"
+    t.text     "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tags", force: true do |t|
     t.string   "tag"
->>>>>>> a9bc226e68e7f4e8e13fce51aada75e97647f300
     t.datetime "created_at"
     t.datetime "updated_at"
   end
