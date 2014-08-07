@@ -8,7 +8,32 @@
 </head>
 <body>
 
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+  	<div class="navbar-header">
+  		<a class="navbar-brand" href="#">Judge</a>
+  	</div>
+
+  	<ul class="nav navbar-nav">
+  		<li><a href="/problems">Problem</a></li>
+  		<li><a href="#">Status</a></li>
+  	</ul>
+
+    <ul class="nav navbar navbar-right">
+      <% if user_signed_in? %>
+        <%= link_to 'Log Out', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%=link_to 'LogIn', new_user_session_path %>
+      <% end %>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
 <%= yield %>
+
+</div>
 
 </body>
 </html>
