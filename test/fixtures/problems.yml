@@ -32,4 +32,6 @@ a_plus_b:
       else
         return -1;
     }
+  check_code: |
+    ???
 

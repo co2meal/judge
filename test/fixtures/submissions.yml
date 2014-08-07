@@ -49,3 +49,22 @@ rte:
       }
       cout << sum << endl;
     }
+wa:
+  problem_id: 1000
+  code: |
+    #include <iostream>
+    using namespace std;
+    int main() {
+      cout << 1 << endl;
+    }
+
+tle:
+  problem_id: 1000
+  code: |
+    #include <iostream>
+    using namespace std;
+    int main() {
+      while(1);
+      cout << 1 << endl;
+    }
+
