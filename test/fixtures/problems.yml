@@ -1,9 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+---
 
-one:
-  title: MyString
-  description: MyText
-
-two:
-  title: MyString
-  description: MyText
+a_plus_b:
+  title: A + B
+  description: |
+    Description
+    -------------
+    
+    Calculate A + B
+    
+    Sample Input
+    ---------------
+        1 2
+    Sample Output
+    ----------
+        3
