@@ -46,6 +46,9 @@ ActiveRecord::Schema.define(version: 20140806114824) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
 
+  add_index "models", ["email"], name: "index_models_on_email", unique: true
+  add_index "models", ["reset_password_token"], name: "index_models_on_reset_password_token", unique: true
+
   create_table "notifications", force: true do |t|
     t.string   "subject"
     t.text     "body"

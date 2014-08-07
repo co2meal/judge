@@ -1,0 +1,10 @@
+
+
+	<ul class="nav nav-tabs" role="tablist">
+	  <li class="active"><a href=""><%=@problem.id %></a></li>
+	  <li><a href="#">오답노트</a></li>
+	</ul>
+	<h1><%= @problem.title %></h1>
+	<hr>
+	<% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true) %>
+	<%= raw markdown.render(@problem.description) %>
