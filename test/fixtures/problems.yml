@@ -2,12 +2,13 @@
 ---
 
 a_plus_b:
+  id: 1000
   title: A + B
   description: |
     Description
     -------------
     
-    Calculate A + B
+     Calculate A + B
     
     Sample Input
     ---------------
@@ -15,3 +16,20 @@ a_plus_b:
     Sample Output
     ----------
         3
+
+  judge_code: |
+    #include <iostream>
+    #include <fstream>
+    using namespace std;
+    int main(int argc, char* argv[]) {
+      ifstream in(argv[1]), out(argv[2]);
+      int a, b;
+      in >> a >> b;
+      int c;
+      out >> c;
+      if (a + b == c)
+        return 0;
+      else
+        return -1;
+    }
+

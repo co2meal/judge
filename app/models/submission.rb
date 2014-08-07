@@ -1,4 +1,10 @@
 class Submission < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :problem
+
+  validates :user, presence: true
+  validates :problem, presence: true
+
   def judge!
     judge_dir = "#{Rails.root}/tmp/judge"
     codefile_path = "#{judge_dir}/#{id}.cpp"

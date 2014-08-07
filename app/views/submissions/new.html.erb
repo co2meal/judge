@@ -1,0 +1,9 @@
+<h1> 제출하기 </h1>
+
+<% @submission.errors.full_messages.each do |message| %>
+  <div class="alert alert-warning" role="alert">
+    <strong> 경고! </strong> <%= message %>
+  </div>
+<% end %>
+
+<%= render 'form' %>
