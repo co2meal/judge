@@ -1,6 +1,7 @@
 ---
 
 valid:
+  problem_id: 1000
   code: |
     #include <iostream>
     
@@ -13,6 +14,7 @@ valid:
     }
 
 mle:
+  problem_id: 1000
   code: |
     #include <iostream>
     #include <string.h>
@@ -27,6 +29,7 @@ mle:
     }
 
 rte:
+  problem_id: 1000
   code: |
     #include <iostream>
 
@@ -46,4 +49,22 @@ rte:
       }
       cout << sum << endl;
     }
-two: {}
+wa:
+  problem_id: 1000
+  code: |
+    #include <iostream>
+    using namespace std;
+    int main() {
+      cout << 1 << endl;
+    }
+
+tle:
+  problem_id: 1000
+  code: |
+    #include <iostream>
+    using namespace std;
+    int main() {
+      while(1);
+      cout << 1 << endl;
+    }
+
