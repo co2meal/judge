@@ -126,6 +126,7 @@ GEM
       polyamorous (~> 1.0.0)
     rdoc (4.1.1)
       json (~> 1.4)
+    redcarpet (3.1.2)
     responders (1.0.0)
       railties (>= 3.2, < 5)
     sass (3.2.19)
@@ -174,6 +175,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   rails (= 4.1.2)
+  redcarpet
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   spring

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140804112123) do
+ActiveRecord::Schema.define(version: 20140807152150) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -59,6 +59,37 @@ ActiveRecord::Schema.define(version: 20140804112123) do
   create_table "problems", force: true do |t|
     t.string   "title"
     t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "check_code"
+    t.text     "judge_code"
+  end
+
+  create_table "problems_tags", force: true do |t|
+    t.integer "problem_id"
+    t.integer "tag_id"
+  end
+
+  create_table "submissions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "problem_id"
+    t.text     "code"
+    t.text     "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "system_tests", force: true do |t|
+    t.text     "input_data"
+    t.integer  "problem_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "system_tests", ["problem_id"], name: "index_system_tests_on_problem_id"
+
+  create_table "tags", force: true do |t|
+    t.string   "tag"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -8,7 +8,34 @@
 </head>
 <body>
 
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="<%= root_path %>">Judge</a>
+    </div>
+
+    <ul class="nav navbar-nav">
+      <li><a href="<%= problems_path %>">Problem</a></li>
+      <li><a href="<%= submissions_path %>">Status</a></li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <% if user_signed_in? %>
+          <a href="<%= destroy_user_session_path %>" data-method="delete"> 로그아웃 </a> </li>
+        <% else %>
+          <a href="<%= new_user_session_path %>"> 로그인 </a>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
 <%= yield %>
+
+</div>
 
 </body>
 </html>
