@@ -35,3 +35,44 @@ a_plus_b:
   check_code: |
     ???
 
+a_minus_b:
+  id: 1001
+  title: A - B
+  description: |
+    문제
+    ============
+
+     A와 B가 주어질 때, A - B를 구하세요.
+
+
+    입력 설명
+    ----------
+     두 개의 숫자 A, B(-10000 <= A, B <= 10000)가 입력됩니다.
+     
+    출력 설명
+    -----------
+     A - B의 값을 한 줄에 출력하세요.
+
+    예제 - 입력
+    ------------
+        3 1
+    예제 - 출력
+    ------------
+        2
+  
+  judge_code: |
+    #include <iostream>
+    #include <fstream>
+    using namespace std;
+    
+    int main(int args, char* argv[]){
+      ifstream in(argv[1]), out(argv[2]);
+      int a, b, c;
+      in >> a >> b;
+      out >> c;
+
+      if(a - b == c) return 0;
+      else return -1;
+    }
+  check_code: |
+    ???
