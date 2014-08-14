@@ -5,10 +5,11 @@ Judge::Application.routes.draw do
     resources :submissions
   end
 
-  devise_for :users
   resources :users do
+    get 'edit', on: :collection
     resources :notifications
   end
+  devise_for :users
   
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
