@@ -1,8 +1,11 @@
 Judge::Application.routes.draw do
   resources :submissions
+  
+  resources :notes
 
   resources :problems do
     resources :submissions
+    resource :notes
   end
 
   devise_for :users
