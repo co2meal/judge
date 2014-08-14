@@ -1,27 +1,20 @@
-<div class="col-md-11">
-	<table class="table">
-		<thead>
-			<th>문제 번호</th>
-			<th>유저 이름</th>
-			<th>상태</th>
-			<th>제출 시간</th>
-			<th> </th>
-		</thead>
+<table class="table">
+	<thead>
+		<th>문제 번호</th>
+		<th>유저 이름</th>
+		<th>상태</th>
+		<th>제출 시간</th>
+	</thead>
 
-		<tbody>
-			<% @submissions.each do |submission| %>
-  				<tr>
-		  			<td> <%= link_to submission.problem_id, problems_path(submission.problem_id) %> </td>
-		  			<td> <%= submission.user_id %> </td>
-		  			<td> <%= submission.status %> </td>
-		  			<td> <%= submission.created_at %> </td>
-		  			<td> <%= submission.problem_id %></td>
-  				</tr>
-  			<% end %>
-		</tbody>
+	<tbody>
+		<% @submissions.each do |submission| %>
+				<tr>
+	  			<td> <%= link_to submission.problem_id, problems_path(submission.problem_id) %> </td>
+	  			<td> <%= submission.user_id %> </td>
+	  			<td> <%= submission.status %> </td>
+	  			<td> <%= submission.created_at %> </td>
+				</tr>
+			<% end %>
+	</tbody>
 
-	</table>
-
-
-
-</div>
+</table>
