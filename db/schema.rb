@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807152150) do
+ActiveRecord::Schema.define(version: 20140811170414) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -46,6 +46,22 @@ ActiveRecord::Schema.define(version: 20140807152150) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
 
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
   create_table "notifications", force: true do |t|
     t.string   "subject"
     t.text     "body"
@@ -74,7 +90,7 @@ ActiveRecord::Schema.define(version: 20140807152150) do
     t.integer  "user_id"
     t.integer  "problem_id"
     t.text     "code"
-    t.text     "status"
+    t.text     "status",     default: "Pending"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
