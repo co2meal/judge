@@ -35,3 +35,177 @@ a_plus_b:
   check_code: |
     ???
 
+a_minus_b:
+  id: 1001
+  title: A - B
+  description: |
+    문제
+    ============
+
+     A와 B가 주어질 때, A - B를 구하세요.
+
+
+    입력 설명
+    ----------
+     두 개의 숫자 A, B(-10000 <= A, B <= 10000)가 입력됩니다.
+    
+    출력 설명
+    -----------
+     A - B의 값을 한 줄에 출력하세요.
+
+    예제 - 입력
+    ------------
+        3 1
+    예제 - 출력
+    ------------
+        2
+  
+  judge_code: |
+    #include <iostream>
+    #include <fstream>
+    using namespace std;
+    
+    int main(int args, char* argv[]){
+      ifstream in(argv[1]), out(argv[2]);
+      int a, b, c;
+      in >> a >> b;
+      out >> c;
+
+      if(a - b == c) return 0;
+      else return -1;
+    }
+  check_code: |
+    ???
+
+getting_sum_of_numbers1:
+  id: 1002
+  title: 숫자의 합 구하기 1
+  description: |
+    문제
+    ------------
+
+     A와 B가 주어질 때, A부터 B까지의 모든 정수의 합을 구하세요.
+
+    입력 설명
+    ------------
+     가장 첫 줄에는 테스트 케이스의 개수 T(1 <= T <= 100)가 입력됩니다.
+    그 뒤 T개의 줄에 각 테스트 케이스의 정수 A, B(-10000 <= A <= B <= 10000)가 주어집니다.
+
+    출력 설명
+    -------------
+     각 테스트 케이스마다 한 줄에 A부터 B까지의 모든 정수의 합을 출력하세요. 
+
+    예제 - 입력
+    -------------
+        2
+        1 100
+        -5 5
+    예제 - 출력
+    -------------
+        5050
+        0
+
+  judge_code: |
+    #include <iostream>
+    #include <fstream>
+    using namespace std;
+    
+    int main(int args, char* argv[]){
+      ifstream in(argv[1]), out(argv[2]);
+      int tc, result = 0;
+      in >> tc;
+      while(tc-- > 0){
+        long long int a, b, ans, submit;
+        in >> a >> b;
+        out >> submit;
+
+        ans = b * (b + 1) / 2 - a * (a + 1) / 2 + a;
+        if(submit == ans) continue;
+        else {result = -1; break;}
+      }
+      return result;
+    }
+  check_code: |
+    ???
+
+making_calculator1:
+  id: 1003
+  title: 계산기 만들기 1
+  description: |
+    문제
+    ------------
+
+     두 개의 숫자와 연산자가 주어질 때,
+    해당 연산의 결과를 구하세요.
+     
+     연산자는 모두 다섯 개이며 각 기호의 의미는 다음과 같습니다.
+
+     A + B = A와 B의 합
+     A - B = A에서 B를 뺀 차
+     A * B = A와 B의 곱
+     A / B = A를 B로 나누었을 때의 몫
+     A % B = A를 B로 나누었을 때의 나머지
+
+    입력 설명
+    ------------
+     가장 첫 줄에는 테스트 케이스의 개수 T(1 <= T <= 100)가 입력됩니다.
+    그 뒤 T개의 줄에 각 테스트 케이스의 정수 A, B(-10000 <= A <= B <= 10000)와 연산자가 주어집니다.
+
+    출력 설명
+    -------------
+     각 테스트 케이스마다 한 줄에 연산의 결과를 출력하세요.
+    연산이 불가능할 경우 따옴표를 제외한 "Impossible"을 출력하세요.
+
+    예제 - 입력
+    -------------
+        5
+        7 3 +
+        7 3 -
+        7 3 *
+        7 3 /
+        7 3 %
+    예제 - 출력
+    -------------
+        10
+        4
+        21
+        2
+        1
+
+  judge_code: |
+    #include <stdio.h>
+    #include <string.h>
+
+    int main(int argc, char* argv[]){
+      FILE* in = fopen(argv[1], "r");
+      FILE* out = fopen(argv[2], "r");
+
+      int tc, result = 0;
+      fscanf(in, "%d", &tc);
+      while(tc-- > 0){
+        int a, b, ans;
+        char c;
+        fscanf(in, "%d %d %c", &a, &b, &c);
+
+        if(b == 0 && (c == '/' || c == '%')){
+          char submit[12];
+          fscanf(out, "%s", submit);
+          if(strcmp(submit, "Impossible") == 0) continue;
+          else {result = -1; break;}
+        }
+
+        if(c == '+') ans = a + b;
+        else if(c == '-') ans = a - b;
+        else if(c == '*') ans = a * b;
+        else if(c == '/') ans = a / b;
+        else ans = a % b;
+
+        int submit;
+        fscanf(out, "%d", &submit);
+        if(submit == ans) continue;
+        else {result = -1; break;}
+      }
+      return result;
+    }
+  check_code: |
+    ???

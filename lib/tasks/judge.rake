@@ -46,7 +46,9 @@ namespace :judge do
 
     submission.update_attribute(:status, "Compiling")
     `g++ -o #{t.name} #{t.source} 2>&1`
-    if not $?.success?
+    if $?.success?
+      submission.update_attribute(:status, "Compile Success")
+    else
       submission.update_attribute(:status, "Compile Error")
     end
   end
@@ -94,6 +96,8 @@ namespace :judge do
   rule SYSTEM_TEST_OUT_REGEXP => lambda { |fn| system_test_in_path(fn.pathmap("%n")) } do |t|
     m = t.name.match(SYSTEM_TEST_OUT_REGEXP)
     submission = Submission.find(m[:submission_id])
+    submission.update_attribute(:status, "testing #{m[:system_test_id]}")
+
     solver = solver_path(submission.id)
     judger = judger_path(submission.problem.id)
 
