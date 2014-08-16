@@ -5,11 +5,12 @@ class Submission < ActiveRecord::Base
   validates :user, presence: true
   validates :problem, presence: true
 
-  def judge!
-    `rake judge:submission[#{id}]`
-  end
-
   after_create do
     self.delay.judge!
+  end
+
+  def judge!
+    #`rake judge:submission[#{id}] --rules`
+    `rake judge:submission[#{id}]`
   end
 end

@@ -10,7 +10,7 @@
 		<% @submissions.each do |submission| %>
 				<tr>
 	  			<td> <%= link_to submission.problem_id, problems_path(submission.problem_id) %> </td>
-	  			<td> <%= submission.user_id %> </td>
+	  			<td> <%= submission.user.email %> </td>
 	  			<td> <%= submission.status %> </td>
 	  			<td> <%= submission.created_at %> </td>
 				</tr>
