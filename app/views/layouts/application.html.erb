@@ -9,54 +9,50 @@
 <body>
 
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container-fluid">
+  <div class="container">
     <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="<%= root_path %>">Judge</a>
     </div>
 
-    <ul class="nav navbar-nav">
-      <li><a href="<%= problems_path %>">Problem</a></li>
-      <li><a href="<%= submissions_path %>">Status</a></li>
-    </ul>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="<%= problems_path %>">Problem</a></li>
+        <li><a href="<%= submissions_path %>">Status</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=current_user.email%><span class="caret"></span></a>
+
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <a href="<%= users_edit_path %>"> 프로필 수정 </a>
+                </li>
+
+                <li class="divider"></li>
 
 
-
-
-
-
-    <ul class="nav navbar-nav navbar-right">
-      <% if user_signed_in? %>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=current_user.email%><span class="caret"></span></a>
-
-            <ul class="dropdown-menu" role="menu">
-              <li>
-                <a href="<%= users_edit_path %>"> 프로필 수정 </a>
-              </li>
-
-              <li class="divider"></li>
-
-
-              <li>
-                <a href="<%= destroy_user_session_path %>" data-method="delete"> 로그아웃 </a>
-              </li>
-            </a>
+                <li>
+                  <a href="<%= destroy_user_session_path %>" data-method="delete"> 로그아웃 </a>
+                </li>
+              </a>
+            </li>
+        <% else %>
+          <li>
+            <a href="<%= new_user_session_path %>"> 로그인 </a>
           </li>
-      <% else %>
-        <li>
-          <a href="<%= new_user_session_path %>"> 로그인 </a>
-          
-        </li>
-      <% end %>
+        <% end %>
       </ul>
     </div>
-  </nav>
-
-
-
-
-
-
+  </div>
+</nav>
 
 <div class="container">
 
