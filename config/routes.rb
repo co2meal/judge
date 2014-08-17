@@ -5,8 +5,11 @@ Judge::Application.routes.draw do
     resources :submissions
   end
 
+  get 'users/edit'
+  patch 'users', to: 'users#update'
   devise_for :users
   resources :users do
+    # get 'edit', on: :collection
     resources :notifications
   end
   
