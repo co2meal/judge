@@ -166,7 +166,7 @@ namespace :judge do
     end
   end
 
-  rule SYSTEM_TEST_OUT_REGEXP => lambda { |fn| system_test_in_path(fn.pathmap("%n")) } do |t|
+  rule SYSTEM_TEST_OUT_REGEXP => lambda { |fn| [system_test_in_path(fn.pathmap("%n")), EASY_SANDBOX_SO] } do |t|
     m = t.name.match(SYSTEM_TEST_OUT_REGEXP)
     submission = Submission.find(m[:submission_id])
 
@@ -175,24 +175,31 @@ namespace :judge do
 
     sh "mkdir -p %s" % t.name.pathmap("%d")
 
-    `echo "ulimit -v 100000; timeout 1 sh -c 'LD_PRELOAD=#{EASY_SANDBOX_SO} #{solver} < #{t.source} | sed 1d > #{t.name}'" | sh`
+    `echo "ulimit -v 100000; timeout 1 sh -c 'LD_PRELOAD=#{EASY_SANDBOX_SO} #{solver} < #{t.source} > #{t.name}'" | sh`
 
     if $?.exitstatus != 0
       case $?.exitstatus
       when 124
-	result submission, "시간 초과"
+        result submission, "시간 초과"
       when 137
-	result submission, "메모리 초과"
+        result submission, "메모리 초과"
       when 139
-	result submission, "실행중 오류"
+        result submission, "실행중 오류"
       else
         result submission, "#{$?.exitstatus} ERROR"
       end
       next
     end
+
+    `sed 1d < #{t.name} > #{t.name}.tmp`
+    `mv #{t.name}.tmp #{t.name}`
   end
 
-  task '/lib/EasySandbox/EasySandbox.so' do
-    puts '??'
+  rule EASY_SANDBOX_SO do |t|
+    Dir.chdir(Rails.root) do
+      sh "git submodule init"
+      sh "git submodule update"
+      sh "make -C %s" % t.name.pathmap("%d")
+    end
   end
 end

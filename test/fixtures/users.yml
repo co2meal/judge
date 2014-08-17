@@ -7,6 +7,6 @@
 ---
 
 test:
-  id: 1234
+  id: 1
   email: test@test.com
  # column: value
