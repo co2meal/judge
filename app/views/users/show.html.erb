@@ -1,23 +1,28 @@
 <!-- user info -->
-<div class="row">
+<div class="well">
 	<div class="media">
-		<a class="pull-right" href="#">
-			<img class="media-object" src="" alt="">
+		<a class="pull-left" href="#">
+			<%= image_tag @user.avatar.url(:thumb) %>
 		</a>
-	<div class="media-body">
+		<div class="media-body">
+			<h4 class="media-heading"><%= @user.email %></h4>
+			<!-- 부들부들 화난다 개못생김; -->
+			<p class="bg-info"><strong>current_sign_in up :</strong><%= @user.current_sign_in_ip%></p>
 
+			<p class="bg-info"><strong>created_at :</strong><%= @user.created_at %></p>
+
+			
 		</div>
-
-</div> 
+	</div>
+</div>
 
 <!-- emblem -->
 <div class="row">
-	
-
+	여기다가 칭호 만들어 넣을 생각인데
 </div>
 
 <!-- notification -->
+<br><br>
 <div class="row">
-	
-
+	여기다가 노티피케이션 만들어 넣을 생각인데
 </div>
