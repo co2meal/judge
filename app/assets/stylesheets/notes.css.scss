@@ -2,11 +2,14 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#note_editor, #note_previewer {
+//@import "crevasse.css";
+//@import "solarized-light.css";
+
+#note_content, #note_previewer {
 	display: inline-block;
 	height: 600px;
 	width: 100%;
 }
-#note_previewer{
-   overflow-y: scroll
+#note_previewer {
+   overflow-y: auto;
  } 

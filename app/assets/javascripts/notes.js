@@ -1,6 +1,6 @@
 
-$(document).ready(function() {
-  $("#note_editor").crevasse({
+$(document).on("page:change", function() {
+  $("#note_content").crevasse({
     previewer: $("#note_previewer")
   });
 });

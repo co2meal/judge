@@ -1,18 +1,9 @@
-<%= form_for [@problem, @note] do |f| %>
-<ul class="nav nav-tabs" role="tablist">
-  <li ><a href="#"><%=@problem.id %></a></li>
-  <li class="active"><a href="#">오답노트</a></li>
-</ul>
 <div class="container">
-  <div class="row">
-    <div class="col-xs-6">
-    	<textarea name="content" id="note_editor"></textarea>
-    </div>
-    <div class="col-xs-6">
-		<div id="note_previewer" class="scrollable"></div>
-    	<%= f.submit "저장하기", class: "btn btn-success btn-lg pull-right" %>
-    </div>
-  </div>
- </div>
-<%end%>
+  <ul class="nav nav-tabs" role="tablist">
+    <li > <%= link_to @problem.id, problem_path(@problem) %> </li>
+    <li class="active"><a href="#">오답노트</a></li>
+  </ul>
 
+  <%= render 'form' %>
+
+</div>

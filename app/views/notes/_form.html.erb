@@ -1,0 +1,12 @@
+<%= form_for [@problem, @note], class: 'form' do |f| %>
+  <%= f.hidden_field :problem_id %>
+  <div class="row">
+    <div class="col-xs-6">
+      <%= f.text_area :content, id: :note_content, class: 'form-control' %>
+    </div>
+    <div class="col-xs-6">
+  	<div id="note_previewer" class="scrollable well"></div>
+    </div>
+  </div>
+  <%= f.submit "저장하기", class: "btn btn-success btn-lg" %>
+<%end%>

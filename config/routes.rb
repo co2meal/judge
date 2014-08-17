@@ -6,6 +6,7 @@ Judge::Application.routes.draw do
   resources :problems do
     resources :submissions
     resource :notes
+    resources :notes
   end
 
   get 'users/edit'
