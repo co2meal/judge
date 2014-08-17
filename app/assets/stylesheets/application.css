@@ -11,6 +11,8 @@
  * file per style scope.
  *
  *= require bootstrap.min.css
+ *= require crevasse.css
+ *= require solarized-light.css
  *= require_tree .
  *= require_self
  */

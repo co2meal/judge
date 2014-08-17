@@ -62,6 +62,17 @@ ActiveRecord::Schema.define(version: 20140814034640) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
+  create_table "notes", force: true do |t|
+    t.text     "content"
+    t.integer  "problem_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notes", ["problem_id"], name: "index_notes_on_problem_id"
+  add_index "notes", ["user_id"], name: "index_notes_on_user_id"
+
   create_table "notifications", force: true do |t|
     t.string   "subject"
     t.text     "body"
