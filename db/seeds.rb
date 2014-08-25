@@ -2,6 +2,9 @@
 User.create!([
   {email: "co2meal@gmail.com", password: "12341234", password_confirmation: "12341234", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: "2014-08-17 07:48:07", sign_in_count: 5, current_sign_in_at: "2014-08-17 10:03:13", last_sign_in_at: "2014-08-17 07:48:07", current_sign_in_ip: "210.107.192.163", last_sign_in_ip: "210.107.192.163", avatar_file_name: nil, avatar_content_type: nil, avatar_file_size: nil, avatar_updated_at: nil}
 ])
+AdminUser.create!([
+  {email: "admin@example.com", password: "password", password_confirmation: "password"}
+])
 Problem.create!([
   {id: 1000, title: "A + B", description: "Description\n-------------\n\n Calculate A + B\n\nSample Input\n---------------\n    1 2\nSample Output\n----------\n    3\n", check_code: "???\n", judge_code: "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main(int argc, char* argv[]) {\n  ifstream in(argv[1]), out(argv[2]);\n  int a, b;\n  in >> a >> b;\n  int c;\n  out >> c;\n  if (a + b == c)\n    return 0;\n  else\n    return -1;\n}\n"},
   {id: 1001, title: "A - B", description: "문제\n============\n\n A와 B가 주어질 때, A - B를 구하세요.\n\n\n입력 설명\n----------\n 두 개의 숫자 A, B(-10000 <= A, B <= 10000)가 입력됩니다.\n\n출력 설명\n-----------\n A - B의 값을 한 줄에 출력하세요.\n\n예제 - 입력\n------------\n    3 1\n예제 - 출력\n------------\n    2\n", check_code: "???\n", judge_code: "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main(int args, char* argv[]){\n  ifstream in(argv[1]), out(argv[2]);\n  int a, b, c;\n  in >> a >> b;\n  out >> c;\n\n  if(a - b == c) return 0;\n  else return -1;\n}\n"},
