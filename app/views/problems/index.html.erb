@@ -27,3 +27,12 @@
   	<% end %>
   </tbody>
 </table>
+
+<ul class="pagination">
+  <li><a href="/problems">&laquo;</a></li>
+  <% num = @problems.total_pages %>
+  <% (1..num).each do |i| %>
+    <li><a href="/problems/<%= i %>"><%= i %></a></li>
+  <% end %>
+  <li><a href="/problems/<%= num %>">&raquo;</a></li>
+</ul>

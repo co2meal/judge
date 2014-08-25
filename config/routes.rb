@@ -3,6 +3,8 @@ Judge::Application.routes.draw do
   
   resources :notes
 
+  get'problems/:page' => 'problems#index'
+
   resources :problems do
     resources :submissions
     resource :notes
