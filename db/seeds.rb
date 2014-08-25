@@ -1,7 +1,19 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+# coding: utf-8
+User.create!([
+  {email: "co2meal@gmail.com", password: "12341234", password_confirmation: "12341234", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: "2014-08-17 07:48:07", sign_in_count: 5, current_sign_in_at: "2014-08-17 10:03:13", last_sign_in_at: "2014-08-17 07:48:07", current_sign_in_ip: "210.107.192.163", last_sign_in_ip: "210.107.192.163", avatar_file_name: nil, avatar_content_type: nil, avatar_file_size: nil, avatar_updated_at: nil}
+])
+AdminUser.create!([
+  {email: "admin@example.com", password: "password", password_confirmation: "password"}
+])
+Problem.create!([
+  {id: 1000, title: "A + B", description: "Description\n-------------\n\n Calculate A + B\n\nSample Input\n---------------\n    1 2\nSample Output\n----------\n    3\n", check_code: "???\n", judge_code: "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main(int argc, char* argv[]) {\n  ifstream in(argv[1]), out(argv[2]);\n  int a, b;\n  in >> a >> b;\n  int c;\n  out >> c;\n  if (a + b == c)\n    return 0;\n  else\n    return -1;\n}\n"},
+  {id: 1001, title: "A - B", description: "문제\n============\n\n A와 B가 주어질 때, A - B를 구하세요.\n\n\n입력 설명\n----------\n 두 개의 숫자 A, B(-10000 <= A, B <= 10000)가 입력됩니다.\n\n출력 설명\n-----------\n A - B의 값을 한 줄에 출력하세요.\n\n예제 - 입력\n------------\n    3 1\n예제 - 출력\n------------\n    2\n", check_code: "???\n", judge_code: "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main(int args, char* argv[]){\n  ifstream in(argv[1]), out(argv[2]);\n  int a, b, c;\n  in >> a >> b;\n  out >> c;\n\n  if(a - b == c) return 0;\n  else return -1;\n}\n"},
+  {id: 1002, title: "숫자의 합 구하기 1", description: "문제\r\n------------\r\n\r\n A와 B가 주어질 때, A부터 B까지의 모든 정수의 합을 구하세요.\r\n\r\n입력 설명\r\n------------\r\n 가장 첫 줄에는 테스트 케이스의 개수 _T_가 입력됩니다.\r\n \r\n그 뒤 _T_개의 줄에 각 테스트 케이스의 정수 _A_, _B_가 주어집니다.\r\n\r\n출력 설명\r\n-------------\r\n\r\n각 테스트 케이스마다 한 줄에 _A_부터 _B_까지의 모든 정수의 합을 출력하세요. \r\n\r\n제약조건\r\n----------\r\n\r\n![1 <= T <= 100](KIN)\r\n\r\n![1 <= A <= B <= 10000](KIN )\r\n\r\n예제 - 입력\r\n-------------\r\n    2\r\n    1 100\r\n    -5 5\r\n\r\n예제 - 출력\r\n-------------\r\n    5050\r\n    0\r\n", check_code: "???\n", judge_code: "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main(int args, char* argv[]){\n  ifstream in(argv[1]), out(argv[2]);\n  int tc, result = 0;\n  in >> tc;\n  while(tc-- > 0){\n    long long int a, b, ans, submit;\n    in >> a >> b;\n    out >> submit;\n\n    ans = b * (b + 1) / 2 - a * (a + 1) / 2 + a;\n    if(submit == ans) continue;\n    else {result = -1; break;}\n  }\n  return result;\n}\n"},
+  {id: 1003, title: "계산기 만들기 1", description: "문제\r\n------------\r\n\r\n두 개의 숫자와 연산자가 주어질 때, 해당 연산의 결과를 구하세요.\r\n\r\n연산자는 모두 다섯 개이며 각 기호의 의미는 다음과 같습니다.\r\n\r\n* __A + B__ : A와 B의 합\r\n* __A - B__ : A에서 B를 뺀 차\r\n* __A * B__ : A와 B의 곱\r\n* __A / B__ : A를 B로 나누었을 때의 몫\r\n* __A % B__ : A를 B로 나누었을 때의 나머지\r\n\r\n\r\n입력 설명\r\n------------\r\n가장 첫 줄에는 테스트 케이스의 개수 _T_가 입력됩니다.\r\n\r\n그 뒤 _T_개의 줄에 각 테스트 케이스의 정수 _A_, _B_와 연산자가 주어집니다.\r\n\r\n출력 설명\r\n-------------\r\n각 테스트 케이스마다 한 줄에 연산의 결과를 출력하세요.\r\n\r\n연산이 불가능할 경우 따옴표를 제외한 \"Impossible\"을 출력하세요.\r\n\r\n제약 조건\r\n-----------\r\n![1 <= T <= 100](http://latex.codecogs.com/gif.latex?1%20%5Cleq%20T%20%5Cleq%20100)\r\n\r\n![(-10000 <= A <= B <= 10000)](http://latex.codecogs.com/gif.latex?-10000%20%5Cleq%20A%20%5Cleq%20B%20%5Cleq%2010000)\r\n\r\n예제 - 입력\r\n-------------\r\n    5\r\n    7 3 +\r\n    7 3 -\r\n    7 3 *\r\n    7 3 /\r\n    7 3 %\r\n예제 - 출력\r\n-------------\r\n    10\r\n    4\r\n    21\r\n    2\r\n    1\r\n", check_code: "???\n", judge_code: "#include <stdio.h>\n#include <string.h>\n\nint main(int argc, char* argv[]){\n  FILE* in = fopen(argv[1], \"r\");\n  FILE* out = fopen(argv[2], \"r\");\n\n  int tc, result = 0;\n  fscanf(in, \"%d\", &tc);\n  while(tc-- > 0){\n    int a, b, ans;\n    char c;\n    fscanf(in, \"%d %d %c\", &a, &b, &c);\n\n    if(b == 0 && (c == '/' || c == '%')){\n      char submit[12];\n      fscanf(out, \"%s\", submit);\n      if(strcmp(submit, \"Impossible\") == 0) continue;\n      else {result = -1; break;}\n    }\n\n    if(c == '+') ans = a + b;\n    else if(c == '-') ans = a - b;\n    else if(c == '*') ans = a * b;\n    else if(c == '/') ans = a / b;\n    else ans = a % b;\n\n    int submit;\n    fscanf(out, \"%d\", &submit);\n    if(submit == ans) continue;\n    else {result = -1; break;}\n  }\n  return result;\n}\n"}
+])
+SystemTest.create!([
+  {input_data: "10 20\n", problem_id: 1000},
+  {input_data: "1 2\n", problem_id: 1000},
+  {input_data: "20 10", problem_id: 1001},
+  {input_data: "    5\r\n    7 3 +\r\n    7 3 -\r\n    7 3 *\r\n    7 3 /\r\n    7 3 %", problem_id: 1003}
+])

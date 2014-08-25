@@ -1,16 +1,16 @@
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href=""><%=@problem.id %></a></li>
-  <li><a href="#">오답노트</a></li>
+  <li><a href="<%= problem_notes_path(@problem.id) %>">오답노트</a></li>
 </ul>
 
 <div class="row">
-  <div class="col-md-9">  
+  <div class="col-md-9 problem">
     <h1><%= @problem.title %></h1>
     <hr>
-    <% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true) %>
+    <% markdown = Redcarpet::Markdown.new(RenderProblem, autolink: true, tables: true) %>
     <%= raw markdown.render(@problem.description) %>
   </div>
   <div class="col-md-3">
     <%= link_to "제출", new_problem_submission_path(@problem), class: 'btn btn-primary' %>
-  </div>  
+  </div>
 </div>

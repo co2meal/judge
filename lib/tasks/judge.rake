@@ -1,6 +1,11 @@
+# coding: utf-8
 
 namespace :judge do
   JUDGE_DIR = "#{Rails.root}/tmp/judge"
+  EASY_SANDBOX_SO = "#{Rails.root}/lib/EasySandbox/EasySandbox.so"
+
+  SUBMISSION_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/submission\..*$/
+
   SOLVER_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/bin\/solver$/
   SOLVER_CODE_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/bin\/solver.cpp$/
 
@@ -29,14 +34,85 @@ namespace :judge do
   end
 
 
+  def result(submission, status=nil)
+    result_file = "#{JUDGE_DIR}/submissions/%s/result" % [submission.id]
+
+    if status.nil?
+      File.readable?(result_file) and File.read(result_file)
+    else
+      sh "mkdir -p %s" % result_file.pathmap("%d")
+      File.open(result_file, "w") do |f|
+        f.puts status
+      end
+    end
+  end
+
   desc "TODO"
   task :submission, [:submission_id] => [:environment] do |t,args|
     submission = Submission.find(args.submission_id)
+    Rake::Task["#{JUDGE_DIR}/submissions/%s/submission.finished" % submission.id].invoke
+  end
+
+  rule 'submission.prepared' do |t|
+    m = t.name.match(SUBMISSION_REGEXP)
+    submission = Submission.find(m[:submission_id])
+    next if result submission
+
+    submission.update_attribute(:status, "준비중")
     Rake::Task["#{JUDGE_DIR}/problems/%s/bin/judger" % submission.problem.id].invoke
     Rake::Task["#{JUDGE_DIR}/submissions/%s/bin/solver" % submission.id].invoke
+    
     submission.problem.system_tests.each do |system_test|
       Rake::Task["#{JUDGE_DIR}/problems/%s/system_tests/%d.in" % [submission.problem.id, system_test.id]].invoke
+    end
+  end
+
+  rule 'submission.executed' => '.prepared' do |t|
+    m = t.name.match(SUBMISSION_REGEXP)
+    submission = Submission.find(m[:submission_id])
+    next if result submission
+
+    submission.update_attribute(:status, "실행중")
+    submission.problem.system_tests.each do |system_test|
       Rake::Task["#{JUDGE_DIR}/submissions/%s/system_tests/%d.out" % [submission.id, system_test.id]].invoke
+    end
+  end
+
+  rule 'submission.judged' => '.executed' do |t|
+    m = t.name.match(SUBMISSION_REGEXP)
+    submission = Submission.find(m[:submission_id])
+    judger = judger_path(submission.problem.id)
+
+    next if result submission
+
+    status = "정답"
+
+    submission.update_attribute(:status, "채점중")
+
+    submission.problem.system_tests.each do |system_test|
+      infile = "#{JUDGE_DIR}/problems/%d/system_tests/%s.in" % [system_test.problem.id, system_test.id]
+      outfile = "#{JUDGE_DIR}/submissions/%s/system_tests/%d.out" % [submission.id, system_test.id]
+
+      `#{judger} #{infile} #{outfile}`
+
+      if not $?.success?
+        status = "오답"
+      end
+    end
+
+    if not result submission
+      result submission, status
+    end
+  end
+
+  rule 'submission.finished' => '.judged' do |t|
+    m = t.name.match(SUBMISSION_REGEXP)
+    submission = Submission.find(m[:submission_id])
+
+    if not result submission
+      submission.update_attribute(:status, "결과 없음")
+    else
+      submission.update_attribute(:status, result(submission))
     end
   end
 
@@ -44,12 +120,9 @@ namespace :judge do
     m = t.name.match(SOLVER_REGEXP)
     submission = Submission.find(m[:submission_id])
 
-    submission.update_attribute(:status, "Compiling")
     `g++ -o #{t.name} #{t.source} 2>&1`
-    if $?.success?
-      submission.update_attribute(:status, "Compile Success")
-    else
-      submission.update_attribute(:status, "Compile Error")
+    if not $?.success?
+      result submission, "컴파일 에러"
     end
   end
 
@@ -93,39 +166,40 @@ namespace :judge do
     end
   end
 
-  rule SYSTEM_TEST_OUT_REGEXP => lambda { |fn| system_test_in_path(fn.pathmap("%n")) } do |t|
+  rule SYSTEM_TEST_OUT_REGEXP => lambda { |fn| [system_test_in_path(fn.pathmap("%n")), EASY_SANDBOX_SO] } do |t|
     m = t.name.match(SYSTEM_TEST_OUT_REGEXP)
     submission = Submission.find(m[:submission_id])
-    submission.update_attribute(:status, "testing #{m[:system_test_id]}")
 
     solver = solver_path(submission.id)
     judger = judger_path(submission.problem.id)
 
     sh "mkdir -p %s" % t.name.pathmap("%d")
 
-    submission.update_attribute(:status, "Judging")
-    `echo "ulimit -v 100000; timeout 1 #{solver} < #{t.source} > #{t.name}" | sh`
+    `echo "ulimit -v 100000; timeout 1 sh -c 'LD_PRELOAD=#{EASY_SANDBOX_SO} #{solver} < #{t.source} > #{t.name}'" | sh`
 
     if $?.exitstatus != 0
       case $?.exitstatus
       when 124
-        submission.update_attribute(:status, "TLE")
+        result submission, "시간 초과"
       when 137
-        submission.update_attribute(:status, "MLE")
+        result submission, "메모리 초과"
       when 139
-        submission.update_attribute(:status, "RTE")
+        result submission, "실행중 오류"
       else
-        submission.update_attribute(:status, "Unknown Error")
+        result submission, "#{$?.exitstatus} ERROR"
       end
-      return
+      next
     end
 
-    `#{judger} #{t.source} #{t.name}`
+    `sed 1d < #{t.name} > #{t.name}.tmp`
+    `mv #{t.name}.tmp #{t.name}`
+  end
 
-    if $?.exitstatus == 0
-      submission.update_attribute(:status, "OK")    
-    else
-      submission.update_attribute(:status, "WA")
+  rule EASY_SANDBOX_SO do |t|
+    Dir.chdir(Rails.root) do
+      sh "git submodule init"
+      sh "git submodule update"
+      sh "make -C %s" % t.name.pathmap("%d")
     end
   end
 end

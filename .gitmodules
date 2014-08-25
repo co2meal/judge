@@ -1,0 +1,3 @@
+[submodule "lib/EasySandbox"]
+	path = lib/EasySandbox
+	url = https://github.com/daveho/EasySandbox.git

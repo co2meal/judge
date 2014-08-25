@@ -1,9 +1,9 @@
 ---
 
 valid:
-  user_id: 1234
+  id: 1
+  user_id: 1
   problem_id: 1000
-  status: "AC"
   code: |
     #include <iostream>
     
@@ -16,9 +16,9 @@ valid:
     }
 
 mle:
-  user_id: 1234
+  id: 2
+  user_id: 1
   problem_id: 1000
-  status: MLE
   code: |
     #include <iostream>
     #include <string.h>
@@ -33,9 +33,9 @@ mle:
     }
 
 rte:
-  user_id: 1234
+  id: 3
+  user_id: 1
   problem_id: 1000
-  status: RTE
   code: |
     #include <iostream>
 
@@ -56,9 +56,9 @@ rte:
       cout << sum << endl;
     }
 wa:
-  user_id: 1234
+  id: 4
+  user_id: 1
   problem_id: 1000
-  status: WA
   code: |
     #include <iostream>
     using namespace std;
@@ -67,9 +67,9 @@ wa:
     }
 
 tle:
-  user_id: 1234
+  id: 5
+  user_id: 1
   problem_id: 1000
-  status: "TLE"
   code: |
     #include <iostream>
     using namespace std;
