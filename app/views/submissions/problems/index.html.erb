@@ -1,0 +1,29 @@
+
+<div class="page-header">
+	<h1>Problems</h1>
+</div>
+
+<table class="table table-striped">
+  <thead>
+  	<tr>
+  		<th>문제 번호</th>
+  		<th>제목</th>
+  		<th>비고</th>
+  		<th>내 결과</th>
+  		<th>총 제출</th>
+  		<th>정답률</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	<% @problems.each do |problem| %>
+  		<tr>
+  			<td><%= problem.id %></td>
+  			<td><%= link_to problem.title, problem_path(problem)%></td>
+  			<td></td>
+  			<td></td>
+  			<td></td>
+  			<td></td>
+  		</tr>
+  	<% end %>
+  </tbody>
+</table>
