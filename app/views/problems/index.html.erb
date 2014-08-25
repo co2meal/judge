@@ -8,9 +8,8 @@
   	<tr>
   		<th>Problem ID</th>
   		<th>Title</th>
-  		<th>Info</th>
-  		<th>AC</th>
   		<th>Submit</th>
+      <th>AC</th>
   		<th>Ratio</th>
   	</tr>
   </thead>
@@ -18,11 +17,36 @@
   	<% @problems.each do |problem| %>
   		<tr>
   			<td><%= problem.id %></td>
-  			<td><%= link_to problem.title, problem_path(problem)%></td>
-  			<td></td>
-  			<td></td>
-  			<td></td>
-  			<td></td>
+  			<td>
+          <%= link_to problem.title, problem_path(problem)%>
+        </td>
+
+  			<td>
+          <%= problem.submissions.count %>
+        </td>
+
+  			<td>
+          <%= problem.submissions.where("status = ?", "정답\n").count %>
+        </td>
+      
+  			<td>
+          <%
+              submit = problem.submissions.count
+
+              if submit<=0
+          %>      
+                0%
+          <%
+              else
+          %>
+          <%=
+            problem.submissions.where("status = ?", "정답\n").count*100/submit
+          %>
+                %
+          <%
+             end
+          %> 
+        </td>
   		</tr>
   	<% end %>
   </tbody>
