@@ -2,7 +2,7 @@ class SubmissionsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    @submissions = Submission.page(params[:page])
+    @submissions = Submission.order('id DESC').page(params[:page])
   end
 
   def new
