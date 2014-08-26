@@ -32,6 +32,7 @@ gem 'thin', group: :production
 gem "paperclip", "~> 4.1"
 
 gem 'seed_dump'
+gem 'kaminari'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

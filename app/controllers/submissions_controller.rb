@@ -2,7 +2,7 @@ class SubmissionsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    @submissions = Submission.all
+    @submissions = Submission.page(params[:page])
   end
 
   def new

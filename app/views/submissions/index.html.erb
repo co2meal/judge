@@ -18,3 +18,12 @@
   </tbody>
 
 </table>
+
+<ul class="pagination">
+  <li><a href="/status">&laquo;</a></li>
+  <% num = @submissions.total_pages %>
+  <% (1..num).each do |i| %>
+    <li><a href="/status/<%= i %>"><%= i %></a></li>
+  <% end %>
+  <li><a href="/status/<%= num %>">&raquo;</a></li>
+</ul>
