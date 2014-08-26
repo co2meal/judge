@@ -1,3 +1,5 @@
+# coding: utf-8
+
 module SubmissionsHelper
 	def status_color(status)
 		# '<span class="label-success">AC</span>'.html_safe
