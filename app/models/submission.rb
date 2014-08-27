@@ -5,6 +5,8 @@ class Submission < ActiveRecord::Base
   validates :user, presence: true
   validates :problem, presence: true
 
+  scope :accepted, -> { where status: '정답' }
+
   after_create do
     self.delay.judge!
   end

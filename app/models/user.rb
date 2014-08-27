@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   
   has_many :notifications
   has_many :submissions
+  has_many :accepted_submissions, -> { accepted }, class_name: 'Submission'
+  has_many :accepted_problems, through: :accepted_submissions, source: :problem
   has_many :notes
 
   devise :database_authenticatable, :registerable,

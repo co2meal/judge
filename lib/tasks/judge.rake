@@ -38,7 +38,7 @@ namespace :judge do
     result_file = "#{JUDGE_DIR}/submissions/%s/result" % [submission.id]
 
     if status.nil?
-      File.readable?(result_file) and File.read(result_file)
+      File.readable?(result_file) and File.read(result_file).strip
     else
       sh "mkdir -p %s" % result_file.pathmap("%d")
       File.open(result_file, "w") do |f|

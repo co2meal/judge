@@ -8,6 +8,7 @@
     <tr>
       <th>문제 번호</th>
       <th>제목</th>
+      <th>정보</th>
       <th>총 제출</th>
       <th>정답</th>
       <th>정답률</th>
@@ -16,9 +17,16 @@
   <tbody>
     <% @problems.each do |problem| %>
       <tr>
-        <td><%= problem.id %></td>
+        <td>
+          <%= problem.id %>
+        </td>
+
         <td>
           <%= link_to problem.title, problem_path(problem)%>
+        </td>
+
+        <td>
+          <%= info_for problem %>
         </td>
 
         <td>
@@ -26,26 +34,11 @@
         </td>
 
         <td>
-          <%= problem.submissions.where("status = ?", "정답\n").count %>
+          <%= problem.submissions.accepted.count %>
         </td>
       
         <td>
-          <%
-              submit = problem.submissions.count
-
-              if submit<=0
-          %>      
-                0%
-          <%
-              else
-          %>
-          <%=
-            problem.submissions.where("status = ?", "정답\n").count*100/submit
-          %>
-                %
-          <%
-             end
-          %> 
+          <%= ratio_for problem %>
         </td>
       </tr>
     <% end %>
