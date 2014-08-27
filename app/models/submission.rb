@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class Submission < ActiveRecord::Base
   belongs_to :user
   belongs_to :problem

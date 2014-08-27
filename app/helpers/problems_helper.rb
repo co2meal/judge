@@ -1,3 +1,5 @@
+# coding: utf-8
+
 module ProblemsHelper
   def info_for(problem)
     res = ""
