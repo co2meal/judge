@@ -1,3 +1,4 @@
+# coding: utf-8
 class ChangeStatusDefaultValueToKorean < ActiveRecord::Migration
   def up
     change_column_default :submissions, :status, "대기중"
