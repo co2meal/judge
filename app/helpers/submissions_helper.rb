@@ -1,9 +1,9 @@
 # coding: utf-8
 
 module SubmissionsHelper
-  def status_color(status)
+  def status_with_label(submission)
     label_type = "label-default"
-    case status
+    case submission.status
     when "대기중", "준비중"
       label_type = "label-default"
     when "실행중"
@@ -17,9 +17,16 @@ module SubmissionsHelper
       label_type = "label-danger"
     end
 
-    res = '<span class="label %s">%s</span>' % [label_type, status]
+    res = '<span class="label %s">%s</span>' % [label_type, submission.status]
 
     return res.html_safe
+  end
 
+  def created_at_with_hack(submission)
+    if user_signed_in? and current_user.hackable_submissions.include? submission
+      link_to submission.created_at, submission
+    else
+      submission.created_at
+    end
   end
 end

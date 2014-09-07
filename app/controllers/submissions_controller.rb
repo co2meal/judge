@@ -1,5 +1,5 @@
 class SubmissionsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :show]
 
   def index
     @submissions = Submission.order('id DESC').page(params[:page])
@@ -21,8 +21,15 @@ class SubmissionsController < ApplicationController
     end
   end
 
+  def show
+    # Should authorize!!!!
+    @submission = Submission.find(params[:id])
+    @hack = @submission.hacks.new
+  end
+
   private
+
   def submission_param
-    params.require(:submission).permit(:code, :problem_id)
+    params.require(:submission).permit(:code, :problem_id, :scope)
   end
 end

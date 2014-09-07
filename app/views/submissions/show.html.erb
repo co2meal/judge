@@ -1,0 +1,4 @@
+<% if @submission.hacks.where("id IS NOT NULL").any? %>
+  <%= render 'hacks/index', hacks: @submission.hacks.where("id IS NOT NULL") %>
+<% end %>
+<%= render 'hacks/form' %>

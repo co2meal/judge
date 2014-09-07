@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140827134954) do
+ActiveRecord::Schema.define(version: 20140829094942) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -62,6 +62,18 @@ ActiveRecord::Schema.define(version: 20140827134954) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
+  create_table "hacks", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "submission_id"
+    t.text     "input_data"
+    t.string   "status",        default: "대기중"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hacks", ["submission_id"], name: "index_hacks_on_submission_id"
+  add_index "hacks", ["user_id"], name: "index_hacks_on_user_id"
+
   create_table "notes", force: true do |t|
     t.text     "content"
     t.integer  "problem_id"
@@ -104,6 +116,7 @@ ActiveRecord::Schema.define(version: 20140827134954) do
     t.text     "status",     default: "대기중"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "scope",      default: "private"
   end
 
   create_table "system_tests", force: true do |t|

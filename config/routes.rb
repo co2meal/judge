@@ -1,5 +1,7 @@
 Judge::Application.routes.draw do
-  resources :submissions
+  resources :submissions do
+    resources :hacks
+  end
   
   resources :notes
 

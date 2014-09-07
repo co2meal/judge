@@ -8,13 +8,13 @@
 
   <tbody>
     <% @submissions.each do |submission| %>
-        <tr>
-          <td> <%= link_to submission.problem.id, submission.problem %> </td>
-          <td> <%= link_to submission.user.email, submission.user %> </td>
-          <td> <%= status_color(submission.status) %> </td>
-          <td> <%= submission.created_at %> </td>
-        </tr>
-      <% end %>
+      <tr>
+        <td> <%= link_to submission.problem.id, submission.problem %> </td>
+        <td> <%= link_to submission.user.email, submission.user %> </td>
+        <td> <%= status_with_label(submission)%> </td>
+        <td> <%= created_at_with_hack(submission) %> </td>
+      </tr>
+    <% end %>
   </tbody>
 
 </table>

@@ -3,7 +3,7 @@
 module ProblemsHelper
   def info_for(problem)
     res = ""
-    if user_signed_in? and current_user.accepted_problems.include? problem
+    if user_signed_in? and current_user.accepted_problems.exists? problem
       res += '<span class="label label-success">%s</span>' % '정답'
     end
 

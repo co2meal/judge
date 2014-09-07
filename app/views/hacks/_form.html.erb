@@ -1,0 +1,12 @@
+<%= form_for [@submission, @hack], class: 'form' do |f| %>
+  <%= f.hidden_field :submission_id %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.text_area :input_data, class: 'form-control' %>
+    </div>
+    <div class="col-md-6">
+      <pre class="line-numbers"><code class="language-cpp"><%= @submission.code %></code></pre>  
+    </div>
+  </div>
+  <%= f.submit "반례 제시", class: "btn btn-success btn-lg" %>
+<% end %>

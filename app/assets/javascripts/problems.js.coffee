@@ -3,6 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 
-$(document).on "page:change", ->
+$(document).on "ready page:change", ->
   window.MathJax.Hub.Queue(["Typeset",MathJax.Hub])
 
