@@ -5,6 +5,7 @@ namespace :judge do
   EASY_SANDBOX_SO = "#{Rails.root}/lib/EasySandbox/EasySandbox.so"
 
   SUBMISSION_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/submission\..*$/
+  HACK_REGEXP = /^#{JUDGE_DIR}\/hacks\/(?<hack_id>\d+)\/hack\..*$/
 
   SOLVER_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/bin\/solver$/
   SOLVER_CODE_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/bin\/solver.cpp$/
@@ -18,7 +19,8 @@ namespace :judge do
   SYSTEM_TEST_IN_REGEXP = /^#{JUDGE_DIR}\/problems\/(?<problem_id>\d+)\/system_tests\/(?<system_test_id>\d+).in$/
   SYSTEM_TEST_OUT_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/system_tests\/(?<system_test_id>\d+).out$/
 
-  # SOLVER_REGEXP = /^#{JUDGE_DIR}\/submissions\/(?<submission_id>\d+)\/bin\/solver$/
+  HACK_IN_REGEXP = /^#{JUDGE_DIR}\/hacks\/(?<hack_id>\d+)\/(?<hack_id>\d+).in$/
+  HACK_OUT_REGEXP = /^#{JUDGE_DIR}\/hacks\/(?<hack_id>\d+)\/(?<hack_id>\d+).out$/
 
   def system_test_in_path(system_test_id)
     system_test = SystemTest.find(system_test_id)    
@@ -33,9 +35,13 @@ namespace :judge do
     "#{JUDGE_DIR}/problems/%s/bin/judger" % problem_id
   end
 
+  def checker_path(problem_id)
+    "#{JUDGE_DIR}/problems/%s/bin/checker" % problem_id
+  end
 
-  def result(submission, status=nil)
-    result_file = "#{JUDGE_DIR}/submissions/%s/result" % [submission.id]
+  def result(object, status=nil)
+    table_name = object.class.table_name
+    result_file = "#{JUDGE_DIR}/%s/%s/result" % [table_name, object.id]
 
     if status.nil?
       File.readable?(result_file) and File.read(result_file).strip
@@ -47,10 +53,37 @@ namespace :judge do
     end
   end
 
-  desc "TODO"
+  def run_test(object, solver, infile, outfile)
+    sh "mkdir -p %s" % outfile.pathmap("%d")
+
+    `echo "ulimit -v 100000; timeout 1 sh -c 'LD_PRELOAD=#{EASY_SANDBOX_SO} #{solver} < #{infile} > #{outfile}'" | sh`
+
+    if $?.exitstatus != 0
+      case $?.exitstatus
+      when 124
+        result object, "시간 초과"
+      when 137
+        result object, "메모리 초과"
+      when 139
+        result object, "실행중 오류"
+      else
+        result object, "#{$?.exitstatus} ERROR"
+      end
+      return
+    end
+
+    `sed 1d < #{outfile} > #{outfile}.tmp`
+    `mv #{outfile}.tmp #{outfile}`
+  end
+
   task :submission, [:submission_id] => [:environment] do |t,args|
     submission = Submission.find(args.submission_id)
     Rake::Task["#{JUDGE_DIR}/submissions/%s/submission.finished" % submission.id].invoke
+  end
+
+  task :hack, [:hack_id] => [:environment] do |t,args|
+    hack = Hack.find(args.hack_id)
+    Rake::Task["#{JUDGE_DIR}/hacks/%s/hack.finished" % hack.id].invoke
   end
 
   rule 'submission.prepared' do |t|
@@ -116,6 +149,67 @@ namespace :judge do
     end
   end
 
+
+
+  rule 'hack.prepared' do |t|
+    m = t.name.match(HACK_REGEXP)
+    hack = Hack.find(m[:hack_id])
+    next if result hack
+
+    hack.update_attribute(:status, "준비중")
+    Rake::Task["#{JUDGE_DIR}/problems/%s/bin/judger" % hack.submission.problem.id].invoke
+    Rake::Task["#{JUDGE_DIR}/problems/%s/bin/checker" % hack.submission.problem.id].invoke
+    Rake::Task["#{JUDGE_DIR}/submissions/%s/bin/solver" % hack.submission.id].invoke
+    
+    Rake::Task["#{JUDGE_DIR}/hacks/%s/%s.in" % [hack.id, hack.id]].invoke
+  end
+
+  rule 'hack.executed' => '.prepared' do |t|
+    m = t.name.match(HACK_REGEXP)
+    hack = Hack.find(m[:hack_id])
+    next if result hack
+
+    hack.update_attribute(:status, "실행중")
+
+    Rake::Task["#{JUDGE_DIR}/hacks/%s/%s.out" % [hack.id, hack.id]].invoke
+  end
+
+  rule 'hack.judged' => '.executed' do |t|
+    m = t.name.match(HACK_REGEXP)
+    hack = Hack.find(m[:hack_id])
+    judger = judger_path(hack.submission.problem.id)
+
+    next if result hack
+
+    status = "핵 실패"
+
+    hack.update_attribute(:status, "채점중")
+
+    infile = "#{JUDGE_DIR}/hacks/%s/%s.in" % [hack.id, hack.id]
+    outfile = "#{JUDGE_DIR}/hacks/%s/%s.out" % [hack.id, hack.id]
+
+    `#{judger} #{infile} #{outfile}`
+
+    if not $?.success?
+      status = "핵 성공"
+    end
+
+    if not result hack
+      result hack, status
+    end
+  end
+
+  rule 'hack.finished' => '.judged' do |t|
+    m = t.name.match(HACK_REGEXP)
+    hack = Hack.find(m[:hack_id])
+
+    if not result hack
+      hack.update_attribute(:status, "결과 없음")
+    else
+      hack.update_attribute(:status, result(hack))
+    end
+  end
+
   rule SOLVER_REGEXP => '.cpp' do |t|
     m = t.name.match(SOLVER_REGEXP)
     submission = Submission.find(m[:submission_id])
@@ -171,28 +265,42 @@ namespace :judge do
     submission = Submission.find(m[:submission_id])
 
     solver = solver_path(submission.id)
-    judger = judger_path(submission.problem.id)
+
+    run_test(submission, solver, t.source, t.name)
+  end
+
+  rule HACK_IN_REGEXP do |t|
+    m = t.name.match(HACK_IN_REGEXP)
+
+    hack = Hack.find(m[:hack_id])
 
     sh "mkdir -p %s" % t.name.pathmap("%d")
 
-    `echo "ulimit -v 100000; timeout 1 sh -c 'LD_PRELOAD=#{EASY_SANDBOX_SO} #{solver} < #{t.source} > #{t.name}'" | sh`
+    File.open(t.name, "w") do |f|
+      f.write Hack.find(m[:hack_id]).input_data
+    end
+  end
+
+  rule HACK_OUT_REGEXP => '.in' do |t|
+    m = t.name.match(HACK_OUT_REGEXP)
+
+    hack = Hack.find(m[:hack_id])
+
+    solver = solver_path(hack.submission.id)
+    judger = judger_path(hack.submission.problem.id)
+    checker = checker_path(hack.submission.problem.id)
+
+    # Check
+
+    `#{checker} < #{t.source}`
 
     if $?.exitstatus != 0
-      case $?.exitstatus
-      when 124
-        result submission, "시간 초과"
-      when 137
-        result submission, "메모리 초과"
-      when 139
-        result submission, "실행중 오류"
-      else
-        result submission, "#{$?.exitstatus} ERROR"
-      end
+      result hack, "제약조건 오류"
       next
     end
 
-    `sed 1d < #{t.name} > #{t.name}.tmp`
-    `mv #{t.name}.tmp #{t.name}`
+    # Solve
+    run_test(hack, solver, t.source, t.name)
   end
 
   rule EASY_SANDBOX_SO do |t|

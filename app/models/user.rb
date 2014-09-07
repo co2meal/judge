@@ -16,7 +16,13 @@ class User < ActiveRecord::Base
 
   def hackable_submissions 
     # Should refer last submission.
-    Submission.where(problem_id: self.accepted_problem_ids).where.not(user_id: self.id).not_accepted.released.group(:user_id).select('*, max(id) as id')
+    Submission.where(problem_id: self.accepted_problem_ids)
+              .where.not(user_id: self.id)
+              .not_accepted
+              .released
+              .group(:user_id)
+              .select('*, max(id) as id')
+
     # If you want to get size, use #size.size instead of #count
     # Ex) user.hackable_submissions.size.size
 

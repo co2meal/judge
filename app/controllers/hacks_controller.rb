@@ -1,5 +1,9 @@
 class HacksController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: [:create, :show]
+
+  def show
+    @hack = Hack.find(params[:id])
+  end
 
   def create
     @submission = Submission.find(params[:submission_id])

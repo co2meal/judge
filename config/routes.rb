@@ -1,4 +1,6 @@
 Judge::Application.routes.draw do
+  resources :hacks
+
   resources :submissions do
     resources :hacks
   end

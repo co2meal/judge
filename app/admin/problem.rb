@@ -1,5 +1,5 @@
 ActiveAdmin.register Problem do
-  permit_params :title, :description
+  permit_params :title, :description, :check_code, :judge_code
 
   # See permitted parameters documentation:
   # https://github.com/gregbell/active_admin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
